@@ -7,16 +7,17 @@ class Pendu {
         this.answer = "";
         this.guessedLetters = [];
         this.lifesLeft = 10;
+        this.found = false;
 
     }
 
     init(word) {
         this.state = gameState.PLAYING;
         this.answer = word.toUpperCase();
-        console.log("Answer", this.answer)
         this.guessedLetters = [];
         this.lifesLeft = 10;
         this.guessedLetters.push("-")
+        this.found = false;
     }
 
     mask() {
@@ -41,9 +42,25 @@ class Pendu {
         }
     }
 
+    guessWord(word) {
+        console.log("Guessed word", word)
+        console.log("Answer", this.answer)
+        if (this.answer.toUpperCase() == word.toUpperCase()) {
+            this.found = true;
+            return guessOutcome.GOOD_GUESS;
+        } else {
+            this.lifesLeft -= 2;
+            return guessOutcome.BAD_GUESS;
+        }
+    }
+
+    gameWon() {
+        return !this.mask().split("").includes("*") || this.found
+    }
+
     gameDone() {
         console.log(this.lifesLeft)
-        return !(this.mask().split("").includes("*") && this.lifesLeft > 0)
+        return this.gameWon() || this.lifesLeft <= 0
     }
 }
 
