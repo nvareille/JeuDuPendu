@@ -80,7 +80,10 @@ client.on('message', msg => {
             } else {
                 msg.reply("Aucun partie ne se joue en ce moment.🙁\n Lances-en une avec .pendu <mot> ! 👌")
             }
-        } else {
+        } else if (command == "help") {
+            msg.reply("Liste des règles:\n.pendu <mot> - Lance une nouvelle partie avec le mot\n.guess <lettre> - Devine une lettre du mot (-1 si faux)\n.oneshot <mot> - Devine le mot entier (-2 si faux)\n Alias:\n.pendu -> .p\n.guess -> .g\n.oneshot -> .os")
+        }
+        else {
             msg.reply("Aucun commande n'a été trouvée avec ce nom: " + command + ". T'es sûre qu'elle existe ? 🤔")
         }
     }
