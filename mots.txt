@@ -1,0 +1,7 @@
+mot
+motdeux
+mottrois
+un
+mot
+par
+ligne

@@ -6,6 +6,8 @@ const Pendu = PenduObject.Pendu;
 const guessOutcome = PenduObject.guessOutcome;
 const gameState = PenduObject.gameState;
 
+const fs = require('fs');
+
 let penduGames = []
 
 client.on('message', msg => {
@@ -16,7 +18,8 @@ client.on('message', msg => {
 
     let pendu = penduGames[guildID]
 
-    if (msg.content[0] == ".") {
+    if (msg.content[0] == ".")
+    {
         let words = msg.content.trim().split(" ");
         let command = words[0].slice(1, words[0].length) || "";
 
@@ -24,17 +27,36 @@ client.on('message', msg => {
         if (words[1] && words[1].length > 0)
             letter = words[1][0];
         let response = "";
-        if (command == "pendu" || command == "p") {
-            if (words.length >= 2 && words[1]) {
+        if (command == "pendu" || command == "p")
+        {
+            if (words.length >= 2 && words[1])
+            {
                 pendu.init(words[1])
                 console.log("Server", msg.guild.name)
                 console.log("Answer", pendu.answer)
                 msg.delete()
                 msg.reply("Nouvelle partie de pendu démarrée avec le mot:\n " + pendu.mask())
-            } else {
-                msg.reply(".pendu <mot>")
             }
-        } else if (command == "guess" || command == "g") {
+            else
+            {
+                fs.readFile("mots.txt", 'utf8', function (err,data)
+                {
+                    let mots = data.split('\n');
+
+                    mots = mots.map(a => a.trim());
+
+                    let mot = mots[Math.floor(Math.random() * mots.length)];
+
+                    console.log(mots);
+                    console.log(mot);
+                    pendu.init(mot);
+
+                    msg.delete()
+                    msg.reply("Nouvelle partie de pendu démarrée avec le mot:\n " + pendu.mask())
+                });
+            }
+        }
+        else if (command == "guess" || command == "g") {
             if (pendu.state == gameState.PLAYING) {
                 if (letter && letter != "") {
                     switch (pendu.newGuess(letter)) {
@@ -49,7 +71,9 @@ client.on('message', msg => {
                             response += pendu.lifesLeft + " vies restantes"
                             break;
                     }
-                } else {
+                }
+                else
+                {
                     response += ".guess <letter>"
                 }
 
